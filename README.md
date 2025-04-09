@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# ⚡ Lightning Web App with WebLN
 
-First, run the development server:
+A React/Next.js application demonstrating Bitcoin Lightning Network integration using WebLN and Alby. Implements core LN functionalities like payments, keysend, auto-pay on scroll, and wallet info display.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+![Demo Screenshot](/screenshot.png) 
+## 🌟 Features
+
+### Core WebLN Functionalities
+- **Send Payments** - Pay Lightning invoices via WebLN
+- **Keysend** - Send direct payments without invoices
+- **Auto-Pay on Scroll** - Pays 1 sat per scroll event (demo mode)
+- **Wallet Info** - Display connected wallet details
+- **Invoice Generator** - Create LN invoices
+- **Payment Form** - Input amount + LN address for payments
+
+### Bonus Features
+- 🕶️ Dark/Light mode toggle
+- 📷 QR code scanner for LN invoices
+- 💱 Fiat ↔ Sats converter
+- 🔒 Secure WebLN provider handling
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js (or React) + TypeScript
+- **Styling**: Tailwind CSS
+- **Lightning**: WebLN, Alby SDK
+- **QR**: `react-qr-reader`, `qrcode.react`
+- **State**: React Hooks (useState, useEffect, useContext)
+
+## 🚀 Quick Start
+
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/Dunsin-cyber/alby-competency-test.git
+   cd alby-competency-test
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in a WebLN-enabled browser (with Alby/NWC wallet).
+
+## 📂 Project Structure
+
+```
+/src
+├── components/       # Reusable components
+│   ├── WebLNProvider # WebLN context
+│   ├── Payment/      # Payment-related components
+│   └── UI/           # Generic UI elements
+├── app/            # Next.js page routes
+│   ├── api/          # API endpoints (if using Next.js)
+│   └── ...           
+├── styles/           # Global styles
+└── utils/            # Helper functions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 WebLN Implementation Details
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The app uses a custom `WebLNProvider` context to manage wallet connections:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```typescript
+// Example from src/components/WebLNProvider.tsx
+const { webln, enableWebln } = useWebLN();
 
-## Learn More
+async function handlePayment(invoice: string) {
+  if (!webln) await enableWebln();
+  await webln?.sendPayment(invoice);
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🎥 Demo Video
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[Watch the application walkthrough](https://your-demo-link.here) 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🌈 Contributing
 
-## Deploy on Vercel
+Contributions welcome! Please open an issue or PR for improvements.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📜 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT © Dunsin 2025
+
