@@ -6,6 +6,7 @@ import {
   IconNewSection,
   IconTerminal2,
 } from "@tabler/icons-react";
+import ThemeToggle from "@/components/ThemeToggle"
 
 export default function FloatingDockDemo() {
   const links = [
@@ -40,9 +41,10 @@ export default function FloatingDockDemo() {
     },
   ];
   return (
-    <div className="">
+    <div className="space-x-4 flex">
+        <ThemeToggle/>
       <FloatingDock
-        // mobileClassName="translate--20" // only for demo, remove for production
+        mobileClassName="translate--20" 
         items={links}
       />
     </div>
