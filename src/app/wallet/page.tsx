@@ -1,15 +1,12 @@
-import React from 'react'
-import Navbar from "@/components/Navbar"
+import Navbar from "@/components/Navbar";
 
 function page() {
   return (
-    <div>
-        <Navbar/>
-        <p>
-            page
-            </p>
-        </div>
-  )
+    <div clasName="px-[2%]">
+      <Navbar />
+      <p>page</p>
+    </div>
+  );
 }
 
-export default page
+export default page;
