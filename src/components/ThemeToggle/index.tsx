@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { FaSun, FaMoon } from 'react-icons/fa';
-
+import {useClient} from "@/context/index";
 
 const ThemeToggle = () => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const {isDarkMode, setIsDarkMode} = useClient();
+
 
     useEffect(() => {
         // Check localStorage for user's theme preference
