@@ -28,7 +28,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </Head>
-      <body className={`antialiased`}>
+      <body className={` antialiased`}>
         <Providers>
           <Toaster
             toastOptions={{

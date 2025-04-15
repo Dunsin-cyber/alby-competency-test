@@ -21,6 +21,9 @@ module.exports = {
           },
         },
       },
+      fontFamily: {
+        golge: ["winky-rough", "sans-serif"],
+      },
     },
   },
   plugins: [],
