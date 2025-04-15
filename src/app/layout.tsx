@@ -1,7 +1,7 @@
 import Providers from "@/components/Provider";
 import type { Metadata } from "next";
-import Head from "next/head";
 import { Toaster } from "react-hot-toast";
+import "./font.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,18 +16,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <body className={` antialiased`}>
         <Providers>
           <Toaster
