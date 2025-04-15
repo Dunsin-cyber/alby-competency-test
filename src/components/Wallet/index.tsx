@@ -1,11 +1,9 @@
 "use client";
-import React from "react";
-import { links } from "@/components/Navbar";
-import { FloatingDock } from "@/components/ui/floating-dock";
+// import React from "react";
 import { useRouter } from "next/navigation";
 import Transactions from "../Transactions";
 
-function index() {
+function Wallet() {
   const router = useRouter();
 
   return (
@@ -37,12 +35,12 @@ function index() {
         <h1 className="text-2xl font-bold">Transactions</h1>
         <Transactions />
       </div>
-      <FloatingDock
+      {/* <FloatingDock
         items={links}
         className="fixed bottom-4 left-0 right-0 z-50"
-      />
+      /> */}
     </div>
   );
 }
 
-export default index;
+export default Wallet;
