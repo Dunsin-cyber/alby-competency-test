@@ -47,7 +47,7 @@ export default function FloatingDockDemo() {
       </div>
       <div className="flex space-x-4 justify-between">
         <ThemeToggle />
-        <FloatingDock mobileClassName="translate--20" items={links} />
+        <FloatingDock mobileClassName="" items={links} />
       </div>
     </div>
   );    

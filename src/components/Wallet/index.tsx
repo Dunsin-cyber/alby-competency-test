@@ -7,8 +7,8 @@ function index() {
       {/* balance */}
       <h1 className="text-2xl font-bold">Wallet</h1>
       <div className="flex space-x-3  items-center justify-center p-4 rounded-md ">
-        <p className="text-4xl font-bold">30.00</p>
-        <p className="text-lg">sats</p>
+        <p className="text-5xl font-bold text-green-600">150,000.00</p>
+        <p className="text-lg text-green-600">sats</p>
       </div>
       {/* action buttons */}
       <div className="flex space-x-4">
