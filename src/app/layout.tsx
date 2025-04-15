@@ -1,19 +1,9 @@
 import Providers from "@/components/Provider";
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
 import Head from "next/head";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
-
-
-// Secondary: Roboto (clean body text)
-const roboto = Roboto({
-  subsets: ["latin"],
-  variable: "--font-secondary",
-  weight: ["400", "500", "700"], // Multiple weights
-  display: "swap",
-});
 export const metadata: Metadata = {
   title: "act",
   description: "Alby Competency Test by Dunsin Abisuwa",
@@ -33,7 +23,7 @@ export default function RootLayout({
         />
       </Head>
       <body
-        className={` ${roboto.variable}  antialiased`}
+        className={`antialiased`}
       >
         <Providers>
           <Toaster

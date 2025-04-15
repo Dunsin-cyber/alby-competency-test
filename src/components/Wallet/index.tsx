@@ -1,3 +1,6 @@
+import React from "react";
+import Transactions from "../Transactions";
+
 function index() {
   return (
     <div className="flex flex-col justify-center items-center">
@@ -21,10 +24,10 @@ function index() {
       </div>
 
       {/* transactions */}
-      <div className="mt-6">
+      <div className="mt-12 flex flex-col justify-center items-center space-y-3">
 
       <h1 className="text-2xl font-bold">Transactions</h1>
-      <div className="bg-gray-200 p-4 rounded-md"></div>
+      <Transactions/>
       </div>
     </div>
   );
