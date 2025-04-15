@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 const config: NextConfig = {
   // Required for font optimization on Vercel
   experimental: {
-    optimizeFonts: true, // Optimizes Google Fonts
+    // Removed optimizeFonts as it is not a valid property
     optimizeCss: true, // Minimizes CSS
   },
 
