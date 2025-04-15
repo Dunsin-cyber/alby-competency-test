@@ -35,12 +35,12 @@ const ThemeToggle = () => {
     return (
         <button
             onClick={toggleTheme}
-            className="p-2 rounded-full cursor-pointer bg-gray-200 dark:bg-gray-700 transition-all duration-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+            className="p-3 my-auto rounded-full cursor-pointer bg-gray-200 dark:bg-gray-700 transition-all duration-300 hover:bg-gray-300 dark:hover:bg-gray-600"
         >
             {isDarkMode ? (
-                <FaSun className="text-yellow-400 w-6 h-6 transition-all duration-300" />
+                <FaSun className="text-yellow-400 w-3 h-3 transition-all duration-300" />
             ) : (
-                <FaMoon className="text-gray-700 dark:text-gray-200 w-6 h-6 transition-all duration-300" />
+                <FaMoon className="text-gray-700 dark:text-gray-200 w-3 h-3 transition-all duration-300" />
             )}
         </button>
     );

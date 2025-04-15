@@ -1,4 +1,5 @@
-import React from "react";
+import ThemeToggle from "@/components/ThemeToggle";
+import ColourfulText from "@/components/ui/colourful-text";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import {
   IconBrandGithub,
@@ -6,7 +7,6 @@ import {
   IconNewSection,
   IconTerminal2,
 } from "@tabler/icons-react";
-import ThemeToggle from "@/components/ThemeToggle"
 
 export default function FloatingDockDemo() {
   const links = [
@@ -41,12 +41,14 @@ export default function FloatingDockDemo() {
     },
   ];
   return (
-    <div className="space-x-4 flex">
-        <ThemeToggle/>
-      <FloatingDock
-        mobileClassName="translate--20" 
-        items={links}
-      />
+    <div className=" flex justify-between items-center mt-5">
+      <div className="text-3xl font-bold z-2 font-sans">
+        <ColourfulText text="ACT" />
+      </div>
+      <div className="flex space-x-4 justify-between">
+        <ThemeToggle />
+        <FloatingDock mobileClassName="translate--20" items={links} />
+      </div>
     </div>
-  );
+  );    
 }
