@@ -17,7 +17,7 @@ import { ProgressProvider } from '@bprogress/next/app';
 // });
 
 
-function Providers({ children }) {
+function Providers({ children }: React.PropsWithChildren<{}>) {
   return (
     <ReduxProvider store={store}>
        {/* <QueryClientProvider client={queryClient}>
