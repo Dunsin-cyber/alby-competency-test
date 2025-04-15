@@ -1,10 +1,11 @@
 import Navbar from "@/components/Navbar";
+import Wallet from "@/components/Wallet";
 
 function page() {
   return (
     <div className="px-[2%]">
       <Navbar />
-      <p>page</p>
+      <Wallet />
     </div>
   );
 }
