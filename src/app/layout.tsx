@@ -17,14 +17,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Winky+Rough&display=swap"
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
           rel="stylesheet"
         />
       </Head>
-      <body
-        className={`antialiased`}
-      >
+      <body className={`antialiased`}>
         <Providers>
           <Toaster
             toastOptions={{
