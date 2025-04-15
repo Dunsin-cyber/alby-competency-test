@@ -19,26 +19,24 @@ import AntdProvider from "./AntdProvider";
 
 function Providers({ children }: React.PropsWithChildren<{}>) {
   return (
-    <ReduxProvider store={store}>
-      {/* <QueryClientProvider client={queryClient}> */}
-      <UserContextProvider>
-        <AntdRegistry>
-          <AntdProvider>
-            <ProgressProvider
-              options={{
-                showSpinner: false,
-              }}
-              color="#1E88E5"
-              height="4px"
-              shallowRouting
-            >
-              {children}
-            </ProgressProvider>
-          </AntdProvider>
-        </AntdRegistry>
-      </UserContextProvider>
-      {/*   </QueryClientProvider> */}
-    </ReduxProvider>
+    <ProgressProvider
+      options={{
+        showSpinner: false,
+      }}
+      color="#1E88E5"
+      height="4px"
+      shallowRouting
+    >
+      <ReduxProvider store={store}>
+        {/* <QueryClientProvider client={queryClient}> */}
+        <UserContextProvider>
+          <AntdRegistry>
+            <AntdProvider>{children}</AntdProvider>
+          </AntdRegistry>
+        </UserContextProvider>
+        {/*   </QueryClientProvider> */}
+      </ReduxProvider>
+    </ProgressProvider>
   );
 }
 

@@ -5,7 +5,7 @@ function page() {
   return (
     <div className="px-[2%]">
       <Navbar />
-      <Wallet />
+      {/* <Wallet /> */}
     </div>
   );
 }

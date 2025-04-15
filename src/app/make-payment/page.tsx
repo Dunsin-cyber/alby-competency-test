@@ -1,9 +1,15 @@
-import React from 'react'
+import Navbar from "@/components/Navbar";
+import Payment from "@/components/Payments";
 
-function page() {
+function Page() {
   return (
-    <div>page</div>
-  )
+    <div className="min-h-screen flex flex-col px-[5%]">
+      <Navbar />
+      <main className="flex-grow flex items-center justify-center">
+        <Payment />
+      </main>
+    </div>
+  );
 }
 
-export default page
+export default Page;
