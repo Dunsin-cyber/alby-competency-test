@@ -3,6 +3,15 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import "./font.css";
 import "./globals.css";
+// import {
+//   init
+// } from "@getalby/bitcoin-connect-react";
+
+
+// // Initialize Bitcoin Connect
+// init({
+//   appName: "Alby Competency Test - act", 
+// })
 
 export const metadata: Metadata = {
   title: "act",

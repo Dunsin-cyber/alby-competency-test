@@ -4,6 +4,7 @@ import store from "@/redux/store";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WebLNProvider } from "@/webln/provider";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ProgressProvider } from "@bprogress/next/app";
 import AntdProvider from "./AntdProvider";
@@ -27,15 +28,17 @@ function Providers({ children }: React.PropsWithChildren<{}>) {
       height="4px"
       shallowRouting
     >
-      <ReduxProvider store={store}>
-        {/* <QueryClientProvider client={queryClient}> */}
-        <UserContextProvider>
-          <AntdRegistry>
-            <AntdProvider>{children}</AntdProvider>
-          </AntdRegistry>
-        </UserContextProvider>
-        {/*   </QueryClientProvider> */}
-      </ReduxProvider>
+      <WebLNProvider>
+        <ReduxProvider store={store}>
+          {/* <QueryClientProvider client={queryClient}> */}
+          <UserContextProvider>
+            <AntdRegistry>
+              <AntdProvider>{children}</AntdProvider>
+            </AntdRegistry>
+          </UserContextProvider>
+          {/*   </QueryClientProvider> */}
+        </ReduxProvider>
+      </WebLNProvider>
     </ProgressProvider>
   );
 }
