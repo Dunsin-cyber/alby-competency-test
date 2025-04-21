@@ -1,10 +1,10 @@
 "use client";
 import { useWebLN } from "@/webln/provider";
 import { Button } from "antd";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Transactions from "../Transactions";
+import {useRouter} from  "@/hooks/useRouterWithProgress";
 
 function Wallet() {
   const router = useRouter();
@@ -50,7 +50,7 @@ function Wallet() {
       {/* action buttons */}
       <div className="flex space-x-4 my-8">
         <button
-          onClick={() => router.push("/make-payment")}
+          onClick={() => router("/make-payment")}
           className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
         >
           <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />

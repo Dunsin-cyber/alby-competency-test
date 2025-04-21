@@ -1,10 +1,10 @@
 "use client";
 
 import { useProgress } from "@bprogress/next";
-import { useRouter } from "next/navigation";
+import { useRouter as useNextRouter } from "next/navigation";
 
-export const useProgressNavigation = () => {
-  const router = useRouter();
+export const useRouter = () => {
+  const router = useNextRouter();
   const progress = useProgress();
 
   const navigate = async (path: string) => {

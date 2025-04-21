@@ -1,11 +1,11 @@
 "use client";
 import ColourfulText from "@/components/ui/colourful-text";
-import { useProgressNavigation } from "@/hooks/useRouterWithProgress";
+import { useRouter } from "@/hooks/useRouterWithProgress";
 import { Button } from "antd";
 import { motion } from "motion/react";
 
 export default function ColourfulTextDemo() {
-  const router = useProgressNavigation();
+  const router = useRouter();
   return (
     <div className="h-screen  w-full flex flex-col space-y-5 items-center justify-center relative overflow-hidden bg-black">
       <motion.img
