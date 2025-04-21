@@ -1,11 +1,11 @@
 "use client";
 import ColourfulText from "@/components/ui/colourful-text";
+import { useProgressNavigation } from "@/hooks/useRouterWithProgress";
 import { Button } from "antd";
 import { motion } from "motion/react";
-import { useRouter } from "next/navigation";
 
 export default function ColourfulTextDemo() {
-  const router = useRouter();
+  const router = useProgressNavigation();
   return (
     <div className="h-screen  w-full flex flex-col space-y-5 items-center justify-center relative overflow-hidden bg-black">
       <motion.img
@@ -20,7 +20,13 @@ export default function ColourfulTextDemo() {
         <ColourfulText text="peer-to-peer" /> <br />
         energy trading.
       </h1>
-      <Button onClick={() => router.push("/wallet")}>Get Started</Button>
+      <Button
+        onClick={() => {
+          router("/wallet");
+        }}
+      >
+        Get Started
+      </Button>
     </div>
   );
 }

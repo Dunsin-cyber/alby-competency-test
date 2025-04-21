@@ -38,7 +38,7 @@ function Providers({ children }: { children: React.ReactNode }) {
             }}
           />
 
-          {/* <AntdProvider> */}
+          <AntdProvider>
             <ProgressProvider
               options={{
                 showSpinner: false,
@@ -49,7 +49,7 @@ function Providers({ children }: { children: React.ReactNode }) {
             >
               {children}
             </ProgressProvider>
-          {/* </AntdProvider> */}
+          </AntdProvider>
         </UserContextProvider>
         {/*   </QueryClientProvider> */}
       </ReduxProvider>
