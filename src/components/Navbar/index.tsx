@@ -7,14 +7,15 @@ import {
   IconNewSection,
   IconTerminal2,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 export const links = [
   {
-    title: "Home",
+    title: "Wallet",
     icon: (
       <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
     ),
-    href: "#",
+    href: "/wallet",
   },
 
   {
@@ -25,25 +26,27 @@ export const links = [
     href: "#",
   },
   {
-    title: "Components",
+    title: "Send",
     icon: (
       <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />
     ),
-    href: "#",
+    href: "/make-payment",
   },
   {
     title: "GitHub",
     icon: (
       <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
     ),
-    href: "https://github.com/successaje/GridX",
+    href: "https://github.com/Dunsin-cyber/alby-competency-test",
   },
 ];
 export default function FloatingDockDemo() {
   return (
     <div className=" flex justify-between items-center mt-5">
       <div className="text-3xl font-bold z-2 font-sans">
-        <ColourfulText text="act" />
+        <Link href="/wallet">
+          <ColourfulText text="act" />
+        </Link>
       </div>
       <div className="flex space-x-4 justify-between">
         <ThemeToggle />

@@ -5,8 +5,8 @@ import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WebLNProvider } from "@/webln/provider";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ProgressProvider } from "@bprogress/next/app";
+import { Toaster } from "react-hot-toast";
 import AntdProvider from "./AntdProvider";
 
 // const queryClient = new QueryClient({
@@ -18,28 +18,42 @@ import AntdProvider from "./AntdProvider";
 //   },
 // });
 
-function Providers({ children }: React.PropsWithChildren<{}>) {
+function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ProgressProvider
-      options={{
-        showSpinner: false,
-      }}
-      color="#1E88E5"
-      height="4px"
-      shallowRouting
-    >
-      <WebLNProvider>
-        <ReduxProvider store={store}>
-          {/* <QueryClientProvider client={queryClient}> */}
-          <UserContextProvider>
-            <AntdRegistry>
-              <AntdProvider>{children}</AntdProvider>
-            </AntdRegistry>
-          </UserContextProvider>
-          {/*   </QueryClientProvider> */}
-        </ReduxProvider>
-      </WebLNProvider>
-    </ProgressProvider>
+    <WebLNProvider>
+      <ReduxProvider store={store}>
+        {/* <QueryClientProvider client={queryClient}> */}
+        <UserContextProvider>
+          <Toaster
+            toastOptions={{
+              className: "",
+              style: {
+                border: `1px solid #AC6AFF`,
+                padding: "16px",
+                color: "#AC6AFF",
+                backgroundColor: "#FFC876",
+                borderRadius: "8px",
+                fontFamily: "Arial, sans-serif",
+              },
+            }}
+          />
+
+          {/* <AntdProvider> */}
+            <ProgressProvider
+              options={{
+                showSpinner: false,
+              }}
+              color="#fffd00"
+              height="4px"
+              shallowRouting
+            >
+              {children}
+            </ProgressProvider>
+          {/* </AntdProvider> */}
+        </UserContextProvider>
+        {/*   </QueryClientProvider> */}
+      </ReduxProvider>
+    </WebLNProvider>
   );
 }
 

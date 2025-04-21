@@ -1,6 +1,5 @@
 import Providers from "@/components/Provider";
 import type { Metadata } from "next";
-import { Toaster } from "react-hot-toast";
 import "./font.css";
 import "./globals.css";
 // import {
@@ -27,19 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={` antialiased`}>
         <Providers>
-          <Toaster
-            toastOptions={{
-              className: "",
-              style: {
-                border: `1px solid #AC6AFF`,
-                padding: "16px",
-                color: "#AC6AFF",
-                backgroundColor: "#FFC876",
-                borderRadius: "8px",
-                fontFamily: "Arial, sans-serif",
-              },
-            }}
-          />
+          
           {children}
         </Providers>
       </body>
