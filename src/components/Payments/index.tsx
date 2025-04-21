@@ -28,7 +28,14 @@ function Payment() {
     <div className="flex flex-col items-center py-8 space-y-8 w-full max-w-md mx-auto">
       <h1 className="text-2xl font-bold text-center">Make Payment</h1>
       <Input placeholder="LNURL here" className="w-full" />
-      <Button onClick={() => handlePayment()} type="primary" className="w-full">
+
+      <Input placeholder="how many sats" className="w-full" />
+      
+      <Button
+        onClick={() => handlePayment()}
+        type="primary"
+        className="mt-8 w-full"
+      >
         Continue
       </Button>
     </div>
