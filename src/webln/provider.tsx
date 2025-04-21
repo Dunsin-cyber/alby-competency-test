@@ -1,24 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-import { requestProvider } from "webln";
-// import {
-//   // Button,
-//   // PayButton,
-//   // init,
-//   // launchModal,
-//   // launchPaymentModal,
-//   // closeModal,
-//   requestProvider,
-//   // typeof WebLNProvider as WebLNProviderType,
-//   // WebLNProvider
-//   // Connect,
-//   // SendPayment,
-// } from "@getalby/bitcoin-connect-react";
-// import  type  {WebLNProviders} from "@getalby/bitcoin-connect-react";
-// import {
-//   requestProvider,
-// } from "@getalby/bitcoin-connect";
+import {
+  requestProvider,
+} from "@getalby/bitcoin-connect";
 
 
 type WebLNContextType = {

@@ -2,11 +2,6 @@
 import React from "react";
 import { useRouter } from "@/hooks/useRouterWithProgress";
 import { useWebLN } from "@/webln/provider";
-import {
-  getConnectorConfig,
-  onConnected,
-  requestProvider,
-} from "@getalby/bitcoin-connect";
 import { Button } from "antd";
 import toast from "react-hot-toast";
 import Transactions from "../Transactions";
