@@ -7,13 +7,11 @@ export const useRouter = () => {
   const router = useNextRouter();
   const progress = useProgress();
 
-  const navigate = async (path: string) => {
+  const navigate =  (path: string) => {
     progress.start();
-    try {
-      await router.push(path);
-    } finally {
-      progress.stop();
-    }
+
+     router.push(path);
+    progress.stop();
   };
 
   return navigate;
