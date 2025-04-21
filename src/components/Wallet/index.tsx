@@ -1,45 +1,32 @@
 "use client";
+import React from "react";
+import { useRouter } from "@/hooks/useRouterWithProgress";
 import { useWebLN } from "@/webln/provider";
+import {
+  getConnectorConfig,
+  onConnected,
+  requestProvider,
+} from "@getalby/bitcoin-connect";
 import { Button } from "antd";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import Transactions from "../Transactions";
-import {useRouter} from  "@/hooks/useRouterWithProgress";
 
 function Wallet() {
   const router = useRouter();
-  const { enable, getInfo, isLoading } = useWebLN();
-  const [info, setInfo] = useState();
-
-  const getBalance = async () => {
-    try {
-      await enable();
-
-      const launchModal = await import("@getalby/bitcoin-connect-react").then(
-        (mod) => {
-          mod.launchModal 
-        }
-      );
-     
-      setInfo(info);
-      toast.success("Wallet connected");
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
+  const { enable, isLoading, balance } = useWebLN();
 
   return (
     <div className="flex flex-col justify-center items-center py-8">
       {/* balance */}
       <h1 className="text-2xl font-bold">Wallet</h1>
-      {info ? (
+      {typeof balance === "number" ? (
         <div className="flex space-x-3  items-center justify-center p-4 rounded-md ">
-          <p className="text-5xl font-bold text-green-600">150,000.00</p>
+          <p className="text-5xl font-bold text-green-600">{balance}</p>
           <p className="text-lg text-green-600">sats</p>
         </div>
       ) : (
         <Button
-          onClick={getBalance}
+          onClick={enable}
           disabled={isLoading}
           loading={isLoading}
           className="bg-slate-950 text-white rounded-full px-4 py-2 my-3"

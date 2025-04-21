@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-import { requestProvider } from "webln";
+// import { requestProvider } from "webln";
 // import {
 //   // Button,
 //   // PayButton,
@@ -16,6 +16,10 @@ import { requestProvider } from "webln";
 //   // SendPayment,
 // } from "@getalby/bitcoin-connect-react";
 // import  type  {WebLNProviders} from "@getalby/bitcoin-connect-react";
+import {
+  requestProvider,
+} from "@getalby/bitcoin-connect";
+
 
 type WebLNContextType = {
   webln: any;
@@ -26,6 +30,8 @@ type WebLNContextType = {
   getInfo: () => any;
   sendPayment: (invoice: string) => Promise<void>;
   makeInvoice: (amount: number) => Promise<string>;
+  getBalance: any;
+  balance: number | null;
 };
 
 const WebLNContext = createContext<WebLNContextType | undefined>(undefined);
@@ -34,12 +40,14 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
   const [webln, setWebln] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [balance, setBalance] = useState<number | null>(null);
 
   const enable = async () => {
     setIsLoading(true);
     setError(null);
     try {
       const provider = await requestProvider();
+      await getBalance();
       setWebln(provider);
     } catch (err) {
       console.log(err);
@@ -84,18 +92,21 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  //  const getBalance = async () => {
-  //   if (!webln) {
-  //     setError("WebLN not enabled");
-  //     return;
-  //   }
-  //   try {
-  //     return await webln.getBalance();
-  //   } catch (err) {
-  //     setError(err instanceof Error ? err.message : "Payment failed");
-  //     throw err;
-  //   }
-  // };
+   const getBalance = async () => {
+    if (!webln) {
+      setError("WebLN not enabled");
+      return;
+    }
+    try {
+      const bb= await webln.getBalance();
+      console.log("balance", bb);
+      setBalance(bb.balance);
+      return bb;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Payment failed");
+      throw err;
+    }
+  };
 
   const makeInvoice = async (amount: number) => {
     if (!webln) {
@@ -120,6 +131,8 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
     getInfo,
     sendPayment,
     makeInvoice,
+    getBalance,
+    balance,
   };
 
   return (
