@@ -19,9 +19,8 @@ const { Paragraph, Text } = Typography;
 const description = "payment with WebLN provider";
 
 function Payment() {
-  const [address, setAddress] = useState("");
   const [payToInvoice, setPayToInvoice] = useState(true);
-  const { currentStep, setCurrentStep, setOpenScanner } = useClient();
+  const { currentStep, setCurrentStep, setOpenScanner, address, setAddress } = useClient();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -59,9 +58,17 @@ function Payment() {
     }
   };
 
+      const [decodedResults, setDecodedResults] = useState([]);
+      const onNewScanResult = (decodedText, decodedResult) => {
+        console.log("App [result]", decodedResult);
+        setDecodedResults((prev) => [...prev, decodedResult]);
+      };
+
   return (
+ 
+    // <Scanner/>
     <div className="flex flex-col items-center py-8 gap-5 w-full max-w-md md:max-w-3xl mx-auto">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full my-4">
         <ArrowLeftOutlined onClick={() => router("/back")} />
         <h1 className="text-2xl font-bold text-center">Make Payment</h1>
         <Scanner />

@@ -1,0 +1,3 @@
+"display": "standalone",
+"start_url": "/",
+"permissions": ["camera"]
