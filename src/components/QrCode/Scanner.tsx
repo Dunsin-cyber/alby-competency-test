@@ -2,7 +2,7 @@
 
 import { useClient } from "@/context/index";
 import { isBolt11Invoice, isLightningAddress } from "@/lib/webln";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { Html5QrcodeScanner, Html5QrcodeScanType } from "html5-qrcode";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
@@ -15,6 +15,9 @@ const createConfig = () => {
     qrbox: { width: 250, height: 250 },
     aspectRatio: 1,
     disableFlip: false,
+    defaultCamera: "environment",
+    supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA], // Optional: restrict to live camera
+    rememberLastUsedCamera: true,
   };
 };
 
@@ -36,7 +39,9 @@ const Scanner = () => {
           toast.error("Invalid Lightning Address or Bolt11 Invoice!");
           return;
         }
-
+        if (navigator.vibrate) {
+          navigator.vibrate(100); // vibrate for 100ms
+        }
         setAddress(decodedText);
         setOpenScanner(false);
         scanner.clear().catch(console.error);
