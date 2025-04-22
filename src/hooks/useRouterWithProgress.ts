@@ -7,10 +7,14 @@ export const useRouter = () => {
   const router = useNextRouter();
   const progress = useProgress();
 
-  const navigate =  (path: string) => {
+  const navigate = (path: string) => {
     progress.start();
 
-     router.push(path);
+    if (path === "/back") {
+      router.back();
+    } else {
+      router.push(path);
+    }
     progress.stop();
   };
 

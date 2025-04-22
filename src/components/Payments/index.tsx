@@ -1,8 +1,15 @@
 "use client";
+import Scanner from "@/components/QrCode/Scanner";
 import { useClient } from "@/context/index";
+import { useRouter } from "@/hooks/useRouterWithProgress";
 import { decodeInvoice } from "@/lib/lightning/decodeInvoice";
 import { isBolt11Invoice, isLightningAddress } from "@/lib/webln";
-import { CheckCircleOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  CheckCircleOutlined,
+  ScanOutlined,
+  SmileOutlined,
+} from "@ant-design/icons";
 import { Button, Input, Result, Steps, Typography } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -14,8 +21,9 @@ const description = "payment with WebLN provider";
 function Payment() {
   const [address, setAddress] = useState("");
   const [payToInvoice, setPayToInvoice] = useState(true);
-  const { currentStep, setCurrentStep } = useClient();
+  const { currentStep, setCurrentStep, setOpenScanner } = useClient();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handlePayment = async () => {
     try {
@@ -53,7 +61,15 @@ function Payment() {
 
   return (
     <div className="flex flex-col items-center py-8 gap-5 w-full max-w-md md:max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold text-center">Make Payment</h1>
+      <div className="flex items-center justify-between w-full">
+        <ArrowLeftOutlined onClick={() => router("/back")} />
+        <h1 className="text-2xl font-bold text-center">Make Payment</h1>
+        <Scanner />
+        <ScanOutlined
+          twoToneColor="#52c41a"
+          onClick={() => setOpenScanner(true)}
+        />
+      </div>
       <Steps
         direction="horizontal"
         current={currentStep}
@@ -149,8 +165,7 @@ function PaymentPreview() {
   );
 }
 
-function PaymentSuccess() { 
-
+function PaymentSuccess() {
   return (
     <Result
       status="success"
@@ -164,20 +179,18 @@ function PaymentSuccess() {
       ]}
     />
   );
-
-
 }
 
 function PaymentError() {
-return (
-  <Result
-    status="warning"
-    title="There are some problems with your operation."
-    extra={
-      <Button type="primary" key="console">
-        Go Console
-      </Button>
-    }
-  />
-)
+  return (
+    <Result
+      status="warning"
+      title="There are some problems with your operation."
+      extra={
+        <Button type="primary" key="console">
+          Go Console
+        </Button>
+      }
+    />
+  );
 }
