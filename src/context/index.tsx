@@ -19,7 +19,7 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [openScanner, setOpenScanner] = useState(true);
+  const [openScanner, setOpenScanner] = useState(false);
   const [address, setAddress] = useState("");
 
   return (

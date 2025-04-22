@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-import { Html5QrcodeScanner } from "html5-qrcode";
 import { useClient } from "@/context/index";
+import { isBolt11Invoice, isLightningAddress } from "@/lib/webln";
+import { Html5QrcodeScanner } from "html5-qrcode";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const qrcodeRegionId = "html5qr-code-full-region";
 
@@ -30,6 +32,10 @@ const Scanner = () => {
     scanner.render(
       (decodedText, decodedResult) => {
         console.log("Scanned:", decodedText);
+        if (!isLightningAddress(decodedText) || !isBolt11Invoice(decodedText)) {
+          toast.error("Invalid Lightning Address or Bolt11 Invoice!");
+          return;
+        }
         setAddress(decodedText);
         setOpenScanner(false);
         scanner.clear().catch(console.error);
@@ -57,7 +63,7 @@ const Scanner = () => {
         />
         <button
           onClick={() => setOpenScanner(false)}
-          className="absolute top-4 right-4 text-white bg-red-600 px-3 py-1 rounded shadow"
+          className="absolute cursor-pointer top-4 right-4 text-white bg-red-600 px-3 py-1 rounded shadow"
         >
           Close
         </button>
