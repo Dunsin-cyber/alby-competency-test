@@ -1,67 +1,55 @@
 "use client";
-import { useClient } from "@/context/index";
 import { useRouter } from "@/hooks/useRouterWithProgress";
-import { decodeInvoice } from "@/lib/lightning/decodeInvoice";
-import { isBolt11Invoice, isLightningAddress } from "@/lib/webln";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, Input, QRCode, Typography, theme } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Converter from "./Converter";
 
 const { Paragraph, Text } = Typography;
 
-const description = "payment with WebLN provider";
-
 function Recieve() {
-  const [payToInvoice, setPayToInvoice] = useState(true);
-  const { currentStep, setCurrentStep, setOpenScanner, address, setAddress } =
-    useClient();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const [generated, setGenerated] = useState(false);
+  const [generated, setGenerated] = useState<boolean>(false);
 
-  const handlePayment = async () => {
-    try {
-      setLoading(true);
-      if (!address) {
-        toast.error("Please enter a valid address!");
-        return;
-      }
+  const [btcPrice, setBtcPrice] = useState<number>(0);
+  const [sats, setSats] = useState<number | string>("");
+  const [fiat, setFiat] = useState<number | string>("");
+  const [description, setDescription] = useState<string>("");
 
-      // Check if the address is a valid Lightning Address or Bolt11 Invoice
-      if (isLightningAddress(address)) {
-        setPayToInvoice(false);
-      } else if (isBolt11Invoice(address)) {
-        const decodedInvoice = await decodeInvoice(address);
-        console.log(decodedInvoice);
-        setPayToInvoice(true);
-      } else {
-        toast.error("Invalid Lightning Address or Bolt11 Invoice!");
-        return;
-      }
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const res = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+      );
+      const data = await res.json();
+      setBtcPrice(data.bitcoin.usd);
+    };
+    fetchPrice();
+  }, []);
 
-      // TODO use enable() first from webln provider
-      setCurrentStep((prev) => prev + 1);
-
-      // const payment = await webln.sendPayment(address);
-      // console.log(payment);
-      // toast.success("Payment sent!");
-    } catch (err) {
-      console.log(err);
-      toast.error(err.message);
-    } finally {
-      setLoading(false);
+  const handleSatsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSats(value);
+    if (btcPrice && !isNaN(+value)) {
+      setFiat(((+value / 100000000) * btcPrice).toFixed(2));
+    } else {
+      setFiat("");
     }
   };
 
-  const [decodedResults, setDecodedResults] = useState([]);
-  const onNewScanResult = (decodedText, decodedResult) => {
-    console.log("App [result]", decodedResult);
-    setDecodedResults((prev) => [...prev, decodedResult]);
+  const handleFiatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFiat(value);
+    if (btcPrice && !isNaN(+value)) {
+      setSats(((+value / btcPrice) * 100000000).toFixed(0));
+    } else {
+      setSats("");
+    }
   };
 
   return (
-    // <Scanner/>
     <div className="flex flex-col items-center py-8 gap-5 w-full max-w-md md:max-w-3xl mx-auto">
       <div className="flex items-center justify-between w-full my-4">
         <ArrowLeftOutlined onClick={() => router("/back")} />
@@ -69,25 +57,30 @@ function Recieve() {
         <div />
       </div>
       {!generated ? (
-        <div className="flex flex-col items-center w-full gap-5 w-full">
+        <div className="flex flex-col items-center w-full gap-5">
           <div className="flex flex-col font-bold space-y-1 w-full">
-            <p>Amount</p>
+            {/* <p>Amount</p>
             <Input
               placeholder="Amount in Satoshi..."
-              value={address}
+              value={sats}
               onChange={(e) => {
-                setAddress(e.target.value);
-                // console.log(e);
+                setSats(e.target.value);
               }}
               className="w-full"
-            />
+            /> */}
+            <Converter/>
           </div>
           <div className="flex flex-col font-bold space-y-1 w-full">
             <p>Description</p>
-            <Input placeholder="Description" className="w-full" />
+            <Input
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              placeholder="Description"
+              className="w-full"
+            />
           </div>
-
-          {/* {payToInvoice && <PaymentPreview />} */}
           <Button
             onClick={() => setGenerated(true)}
             disabled={loading}
