@@ -2,9 +2,13 @@
 import { useClient } from "@/context/index";
 import { decodeInvoice } from "@/lib/lightning/decodeInvoice";
 import { isBolt11Invoice, isLightningAddress } from "@/lib/webln";
-import { Button, Input, Steps } from "antd";
+import { CheckCircleOutlined, SmileOutlined } from "@ant-design/icons";
+import { Button, Input, Result, Steps, Typography } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
+
+const { Paragraph, Text } = Typography;
+
 const description = "payment with WebLN provider";
 
 function Payment() {
@@ -94,9 +98,10 @@ function Payment() {
         }}
         className="w-full"
       />
-
-      <Input placeholder="how many sats" className="w-full" />
-
+      {!payToInvoice && (
+        <Input placeholder="how many sats" className="w-full" />
+      )}
+      {/* {payToInvoice && <PaymentPreview />} */}
       <Button
         onClick={() => handlePayment()}
         disabled={loading}
@@ -111,3 +116,68 @@ function Payment() {
 }
 
 export default Payment;
+
+function PaymentPreview() {
+  // get details from redux state
+  return (
+    <Result
+      icon={<SmileOutlined />}
+      title="30,000 sats"
+      subTitle="you are about to pay the above amount for bread"
+    >
+      <div className="desc">
+        <Paragraph>
+          <Text
+            strong
+            style={{
+              fontSize: 16,
+            }}
+          >
+            This transaction:
+          </Text>
+        </Paragraph>
+        <Paragraph>
+          <CheckCircleOutlined className="site-result-demo-success-icon" /> will
+          expire in 20 minutes
+        </Paragraph>
+        <Paragraph>
+          <CheckCircleOutlined className="site-result-demo-success-icon" /> has
+          a payment hash of : temp1p5qwz9upp5frn2ewcm48...
+        </Paragraph>
+      </div>
+    </Result>
+  );
+}
+
+function PaymentSuccess() { 
+
+  return (
+    <Result
+      status="success"
+      title="Successfully Purchased Cloud Server ECS!"
+      subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+      extra={[
+        <Button type="primary" key="console">
+          Go Console
+        </Button>,
+        <Button key="buy">Buy Again</Button>,
+      ]}
+    />
+  );
+
+
+}
+
+function PaymentError() {
+return (
+  <Result
+    status="warning"
+    title="There are some problems with your operation."
+    extra={
+      <Button type="primary" key="console">
+        Go Console
+      </Button>
+    }
+  />
+)
+}
