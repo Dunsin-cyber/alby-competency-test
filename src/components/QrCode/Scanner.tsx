@@ -31,11 +31,12 @@ const Scanner = () => {
 
     scanner.render(
       (decodedText, decodedResult) => {
-        console.log("Scanned:", decodedText);
-        if (!isLightningAddress(decodedText) || !isBolt11Invoice(decodedText)) {
+        console.log(decodedText)
+        if (!isLightningAddress(decodedText) && !isBolt11Invoice(decodedText)) {
           toast.error("Invalid Lightning Address or Bolt11 Invoice!");
           return;
         }
+
         setAddress(decodedText);
         setOpenScanner(false);
         scanner.clear().catch(console.error);
