@@ -40,7 +40,10 @@ function Wallet() {
             Send Sats
           </span>
         </button>
-        <button className="shadow-[inset_0_0_0_2px_#616467] text-black px-6 py-3 rounded-full tracking-widest font-bold bg-transparent hover:bg-[#616467] hover:text-white dark:text-neutral-200 transition duration-200">
+        <button
+          onClick={() => router("/receive")}
+          className="cursor-pointer shadow-[inset_0_0_0_2px_#616467] text-black px-6 py-3 rounded-full tracking-widest font-bold bg-transparent hover:bg-[#616467] hover:text-white dark:text-neutral-200 transition duration-200"
+        >
           Recieve
         </button>
       </div>
