@@ -29,7 +29,7 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [address, setAddress] = useState("");
   const [invoiceSats, setInvoiceSats] = useState(0);
   const [createdInvoice, setCreatedInvoice] = useState("");
-  const [steps, setSteps] = useState(3);
+  const [steps, setSteps] = useState(0);
 
   return (
     <UserContext.Provider

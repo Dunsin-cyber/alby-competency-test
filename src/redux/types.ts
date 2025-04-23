@@ -8,7 +8,7 @@ export interface UserDetails {
 }
 
 export interface InvoiceDetails {
-    millisatoshis: number;
+    millisatoshis: string;
     satoshis: number;
     description: string;
     timeLeft: number;

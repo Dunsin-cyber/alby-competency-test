@@ -20,6 +20,6 @@ export const WalletSlice = createSlice({
     },
 });
 
-export const { clearWallet } = WalletSlice.actions;
+export const { clearWallet, addWallet } = WalletSlice.actions;
 
 export default WalletSlice.reducer;

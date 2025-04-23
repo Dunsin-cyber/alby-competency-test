@@ -20,6 +20,6 @@ export const InvoiceSlice = createSlice({
     },
 });
 
-export const { addInvoice } = InvoiceSlice.actions;
+export const { addInvoice, clearInvoice } = InvoiceSlice.actions;
 
 export default InvoiceSlice.reducer;
