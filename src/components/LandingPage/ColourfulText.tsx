@@ -16,9 +16,9 @@ export default function ColourfulTextDemo() {
         transition={{ duration: 1 }}
       />
       <h1 className="text-2xl px-8 md:text-3xl lg:text-7xl font-bold text-center text-white relative z-2 font-sans">
-        Redefining energy ownership with blockchain-powered{" "}
-        <ColourfulText text="peer-to-peer" /> <br />
-        energy trading.
+        Instant payments. Zero barriers. Pure Lightning with{" "}
+        <ColourfulText text="Alby" /> <br />
+        Libraries
       </h1>
       <Button
         onClick={() => {

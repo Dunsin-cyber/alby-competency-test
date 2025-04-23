@@ -1,43 +1,43 @@
-import React from 'react'
+import React from "react";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 
 function Features() {
-     const testimonials = [
-       {
-         quote:
-           "Ensures trustless, tamper-proof transactions between energy producers and consumers",
-         name: "Smart Contract Automation",
-           designation: "Develops secure, self-executing contracts for energy trades.",
-           src:"/automation.jpg"
-       },
-       {
-         quote: "Dynamic energy pricing based on demand and supply, optimizing cost efficiency.",
-         name: "Real-Time Pricing",
-           designation: "Optimizes pricing through demand-supply analytics.",
-           src:"/pricing.jpg"
-        },
-       {
-         quote: "Users earn, trade, and redeem energy credits via blockchain-based tokens.",
-         name: "Tokenized Energy Credits",
-        designation: "Manages blockchain-based energy credit transactions.",
-        src: "/credits.jpg"
-        },
-       {
-         quote:
-           "Secure and immutable data storage using blockchain.",
-         name: "Decentralized Storage",
-        designation: "Ensures data integrity with tamper-proof records.",
-        src:"/storage.jpg"
-        },
-       {
-         quote: "Supports crypto and stablecoin payments for frictionless transactions.",
-         name: "Seamless Payment Integration",
-         src: "/pay-int.jpg",
-        designation: "Facilitates instant and borderless energy payments."
-        },
-     ];
- 
+  const testimonials = [
+    {
+      quote:
+        "Send payments instantly with a click or scroll — no invoices needed.",
+      name: "Keysend Lightning Payments",
+      designation: "Effortless P2P payments using WebLN’s keysend.",
+      src: "/automation.jpg",
+    },
+    {
+      quote: "Pay 1 sat every time you scroll. Programmable money made simple.",
+      name: "Auto-Payment on Scroll",
+      designation: "Triggers micro-payments as users interact with content.",
+      src: "/pricing.jpg",
+    },
+    {
+      quote:
+        "Seamless WebLN integration for one-click wallet access and payments.",
+      name: "Native WebLN Support",
+      designation: "Enables seamless wallet interactions in-browser.",
+      src: "/credits.jpg",
+    },
+    {
+      quote: "Check wallet balance and connection status directly in the app.",
+      name: "Live Wallet Info",
+      designation: "Displays real-time user wallet metadata.",
+      src: "/storage.jpg",
+    },
+    {
+      quote: "Embed instant tips and micro-support with Simple Boost.",
+      name: "Boosted Content Support",
+      designation: "Easily monetize content using Lightning tips.",
+      src: "/pay-int.jpg",
+    },
+  ];
+
   return <AnimatedTestimonials testimonials={testimonials} autoplay={true} />;
 }
 
-export default Features
+export default Features;
