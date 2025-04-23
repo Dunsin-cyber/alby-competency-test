@@ -51,7 +51,11 @@ function Wallet() {
       {/* transactions */}
       <div className="flex flex-col justify-center items-center space-y-3">
         <h1 className="text-2xl font-bold">Transactions</h1>
-        <Transactions />
+        <p className="text-sm text-gray-500">
+          No transactions yet. 
+          Send or receive some sats to see them here.
+        </p>
+        {/* <Transactions /> */}
       </div>
       {/* <FloatingDock
         items={links}

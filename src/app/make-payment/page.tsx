@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar/AppNavbar";
 import Payment from "@/components/Payments";
 
 function Page() {

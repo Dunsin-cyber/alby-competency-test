@@ -1,9 +1,6 @@
 "use client";
+import { requestProvider } from "@getalby/bitcoin-connect";
 import React, { createContext, useContext, useState } from "react";
-import {
-  requestProvider,
-} from "@getalby/bitcoin-connect";
-
 
 type WebLNContextType = {
   webln: any;
@@ -13,7 +10,7 @@ type WebLNContextType = {
   disconnect: () => void;
   getInfo: () => any;
   sendPayment: (invoice: string) => Promise<void>;
-  makeInvoice: (amount: number, description:string) => Promise<string>;
+  makeInvoice: (amount: number, description: string) => Promise<string>;
   getBalance: any;
   balance: number | null;
 };
@@ -29,10 +26,18 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
   const enable = async () => {
     setIsLoading(true);
     setError(null);
+
     try {
       const provider = await requestProvider();
-      await getBalance();
+
+      if (!provider) {
+        throw new Error("No WebLN provider found");
+      }
+
+      await provider.enable();
       setWebln(provider);
+
+      await getBalance();
     } catch (err) {
       console.log(err);
       setError(err instanceof Error ? err.message : "Failed to enable WebLN");
@@ -69,20 +74,20 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     try {
-      await webln.sendPayment(invoice);
+      return await webln.sendPayment(invoice);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Payment failed");
       throw err;
     }
   };
 
-   const getBalance = async () => {
+  const getBalance = async () => {
     if (!webln) {
       setError("WebLN not enabled");
       return;
     }
     try {
-      const bb= await webln.getBalance();
+      const bb = await webln.getBalance();
       console.log("balance", bb);
       setBalance(bb.balance);
       return bb;
@@ -92,7 +97,7 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const makeInvoice = async (amount: number, description:string) => {
+  const makeInvoice = async (amount: number, description: string) => {
     if (!webln) {
       setError("WebLN not enabled");
       throw new Error("WebLN not enabled");
@@ -101,7 +106,7 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
       const args = {
         amount: amount,
         defaultMemo: description,
-      }
+      };
       const invoice = await webln.makeInvoice(args);
       return invoice.paymentRequest;
     } catch (err) {

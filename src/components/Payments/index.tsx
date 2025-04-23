@@ -1,5 +1,6 @@
 "use client";
 import Scanner from "@/components/QrCode/Scanner";
+import Converter from "@/components/Receive/Converter";
 import { useClient } from "@/context/index";
 import { useRouter } from "@/hooks/useRouterWithProgress";
 import { decodeInvoice } from "@/lib/lightning/decodeInvoice";
@@ -8,16 +9,16 @@ import { isBolt11Invoice, isLightningAddress } from "@/lib/webln";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { addInvoice } from "@/redux/slice/InvoiceSlice";
 import { InvoiceDetails } from "@/redux/types";
+import { useWebLN } from "@/webln/provider";
 import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
   ScanOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Button, Input, Result, Steps, Typography } from "antd";
+import { Button, Input, Result, Space, Steps, Typography } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import Converter from "@/components/Receive/Converter";
 
 const { Paragraph, Text } = Typography;
 
@@ -36,8 +37,12 @@ function Payment() {
     invoiceSats,
   } = useClient();
   const [loading, setLoading] = useState(false);
+  const [paying, setPaying] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { enable, sendPayment } = useWebLN();
+
+  const invoice = useAppSelector((state) => state.invoice);
 
   const handlePayment = async () => {
     try {
@@ -61,6 +66,7 @@ function Payment() {
           description: decodedInvoice.tags[1].data as string,
           hash: decodedInvoice.tags[0].data as string,
           timeLeft: decodedInvoice.timeExpireDate,
+          lnurl: address,
         };
         dispatch(addInvoice(params));
         setPayToInvoice(true);
@@ -95,23 +101,23 @@ function Payment() {
 
       const data = await res.json();
       toast.success("Invoice created successfully");
-      if(data) {
-      const decodedInvoice = await decodeInvoice(data.invoice);
-       const params: InvoiceDetails = {
-         millisatoshis: decodedInvoice.millisatoshis,
-         satoshis: decodedInvoice.satoshis,
-         description: decodedInvoice.tags[1].data as string,
-         hash: decodedInvoice.tags[0].data as string,
-         timeLeft: decodedInvoice.timeExpireDate,
-       };
-       dispatch(addInvoice(params));
-       setPayToInvoice(true);
-       // move to payment preview screen
-       setSteps(1);
-       // move to payment preview on the progress bar for (LN ADDRESS)
-       setProgressBarStep(2);
+      if (data) {
+        const decodedInvoice = await decodeInvoice(data.invoice);
+        const params: InvoiceDetails = {
+          millisatoshis: decodedInvoice.millisatoshis,
+          satoshis: decodedInvoice.satoshis,
+          description: decodedInvoice.tags[1].data as string,
+          hash: decodedInvoice.tags[0].data as string,
+          timeLeft: decodedInvoice.timeExpireDate,
+          lnurl: data.invoice,
+        };
+        dispatch(addInvoice(params));
+        setPayToInvoice(true);
+        // move to payment preview screen
+        setSteps(1);
+        // move to payment preview on the progress bar for (LN ADDRESS)
+        setProgressBarStep(2);
       }
-    
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -121,6 +127,32 @@ function Payment() {
   };
 
   //
+  const handlePay = async () => {
+    try {
+      setPaying(true);
+      await enable();
+      const pay = await sendPayment(invoice?.lnurl);
+      console.log(pay);
+
+      setSteps(2);
+      if (payToInvoice) {
+        setProgressBarStep(2);
+      } else {
+        setProgressBarStep(3);
+      }
+    } catch (err) {
+      console.log(err);
+      if (payToInvoice) {
+        setProgressBarStep(2);
+      } else {
+        setProgressBarStep(3);
+      }
+      setSteps(3);
+      toast.error(err.message);
+    } finally {
+      setPaying(false);
+    }
+  };
 
   return (
     // <Scanner/>
@@ -150,6 +182,10 @@ function Payment() {
                       title: "Preview",
                       description,
                     },
+                    {
+                      title: "Status",
+                      description: "Failure or Success",
+                    },
                   ]
                 : [
                     {
@@ -160,10 +196,14 @@ function Payment() {
                       title: "Amount in Sats",
                       description,
                     },
-           
+
                     {
                       title: "Preview",
                       description,
+                    },
+                    {
+                      title: "Status",
+                      description: "Failure or Success",
                     },
                   ]
             }
@@ -177,9 +217,7 @@ function Payment() {
             }}
             className="w-full"
           />
-          {!payToInvoice && (
-            <Converter/>
-          )}
+          {!payToInvoice && <Converter />}
           <Button
             onClick={() => handlePayment()}
             disabled={loading}
@@ -194,15 +232,29 @@ function Payment() {
       {steps > 0 && (
         <div className="flex flex-col items-center w-full gap-5">
           <Screens steps={steps} />
-          <Button
-            onClick={() => {
-              setSteps((prev) => prev - 1);
-            }}
-            type="primary"
-            className="mt-8 w-full"
-          >
-            Go Back
-          </Button>
+          <Space>
+            <Button
+              onClick={() => {
+                setSteps((prev) => prev - 1);
+              }}
+              disabled={paying}
+              type="primary"
+              className="mt-8 w-full"
+            >
+              Go Back
+            </Button>
+            {steps === 1 && (
+
+              <Button
+              onClick={handlePay}
+              loading={paying}
+              disabled={paying}
+              className="mt-8 w-full"
+              >
+              Pay
+            </Button>
+            )}
+          </Space>
         </div>
       )}
     </div>
@@ -230,7 +282,10 @@ function PaymentPreview() {
     <Result
       icon={<SmileOutlined />}
       title={`${invoice?.satoshis.toLocaleString()} sats`}
-      subTitle={`you are about to pay the above amount for ${invoice?.description.slice(0,30)}...`}
+      subTitle={`you are about to pay the above amount for ${invoice?.description.slice(
+        0,
+        30
+      )}...`}
     >
       <div className="desc">
         <Paragraph>
@@ -257,17 +312,12 @@ function PaymentPreview() {
 }
 
 function PaymentSuccess() {
+    const invoice = useAppSelector((state) => state.invoice);
   return (
     <Result
       status="success"
-      title="Successfully Purchased Cloud Server ECS!"
-      subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
-      extra={[
-        <Button type="primary" key="console">
-          Go Console
-        </Button>,
-        <Button key="buy">Buy Again</Button>,
-      ]}
+      title="Successfully Made Payment"
+      subTitle={` you paid ${invoice?.satoshis.toLocaleString()} sats for ${invoice?.description.slice(0, 30)}...`}
     />
   );
 }
@@ -276,12 +326,8 @@ function PaymentError() {
   return (
     <Result
       status="warning"
-      title="There are some problems with your operation."
-      extra={
-        <Button type="primary" key="console">
-          Go Console
-        </Button>
-      }
+      title="Payment Failed"
+
     />
   );
 }

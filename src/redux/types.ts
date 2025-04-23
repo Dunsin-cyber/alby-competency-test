@@ -13,6 +13,7 @@ export interface InvoiceDetails {
     description: string;
     timeLeft: number;
     hash: string;
+    lnurl: string
 }
 
 export interface WalletDetails {
