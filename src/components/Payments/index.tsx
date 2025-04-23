@@ -20,9 +20,11 @@ const description = "payment with WebLN provider";
 
 function Payment() {
   const [payToInvoice, setPayToInvoice] = useState(true);
-  const { currentStep, setCurrentStep, setOpenScanner, address, setAddress } = useClient();
+  const { currentStep, setCurrentStep, setOpenScanner, address, setAddress, steps, setSteps } = useClient();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const [decodedResults, setDecodedResults] = useState([]);
 
   const handlePayment = async () => {
     try {
@@ -37,7 +39,9 @@ function Payment() {
         setPayToInvoice(false);
       } else if (isBolt11Invoice(address)) {
         const decodedInvoice = await decodeInvoice(address);
+        setDecodedResults((prev) => [...prev, decodedInvoice]);
         console.log(decodedInvoice);
+
         setPayToInvoice(true);
       } else {
         toast.error("Invalid Lightning Address or Bolt11 Invoice!");
@@ -58,14 +62,9 @@ function Payment() {
     }
   };
 
-      const [decodedResults, setDecodedResults] = useState([]);
-      const onNewScanResult = (decodedText, decodedResult) => {
-        console.log("App [result]", decodedResult);
-        setDecodedResults((prev) => [...prev, decodedResult]);
-      };
+  //
 
   return (
- 
     // <Scanner/>
     <div className="flex flex-col items-center py-8 gap-5 w-full max-w-md md:max-w-3xl mx-auto">
       <div className="flex items-center justify-between w-full my-4">
@@ -77,6 +76,9 @@ function Payment() {
           onClick={() => setOpenScanner(true)}
         />
       </div>
+    {steps === 0 && (
+
+      <div className="flex flex-col space-y-1 w-full"> 
       <Steps
         direction="horizontal"
         current={currentStep}
@@ -84,8 +86,8 @@ function Payment() {
           payToInvoice
             ? [
                 {
-                  title: "LN invoice",
-                  description,
+                  title: "Address / Invoice",
+                  description: "paste your invoice or LN address here",
                 },
                 {
                   title: "Preview",
@@ -95,7 +97,7 @@ function Payment() {
             : [
                 {
                   title: "LN Address",
-                  description,
+                  description: "paste your invoice or LN address here",
                 },
                 {
                   title: "Amount in Sats",
@@ -113,7 +115,7 @@ function Payment() {
         }
       />
       <Input
-        placeholder="LNURL here"
+        placeholder="paste your invoice or LN address here"
         value={address}
         onChange={(e) => {
           setAddress(e.target.value);
@@ -131,14 +133,43 @@ function Payment() {
         loading={loading}
         type="primary"
         className="mt-8 w-full"
-      >
+        >
         Continue
       </Button>
+      </div>
+      )}
+      {steps > 0 && (
+        <div className="flex flex-col items-center w-full gap-5">
+          <Screens steps={steps} />
+          <Button
+            onClick={() => {
+              setSteps(prev => prev - 1);
+            }}
+            type="primary"
+            className="mt-8 w-full"
+          >
+            Go Back
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
 
 export default Payment;
+
+function Screens({ steps }: { steps: number }) {
+  switch (steps) {
+    case 1:
+      return <PaymentPreview />;
+    case 2:
+      return <PaymentSuccess />;
+    case 3:
+      return <PaymentError />;
+    default:
+      return <p>Unknown status</p>;
+  }
+}
 
 function PaymentPreview() {
   // get details from redux state

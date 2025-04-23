@@ -7,18 +7,16 @@ export interface UserDetails {
     updatedAt: string;
 }
 
+export interface InvoiceDetails {
+    millisatoshis: number;
+    satoshis: number;
+    description: string;
+    timeLeft: number;
+    hash: string;
+}
 
-export interface TokenDetail {
-    address: `0x${string}`;
+export interface WalletDetails {
+    id: string;
     name: string;
-    symbol: string;
-    price: string;
+    balance: number;
 }
-
-export interface Token {
-    token1: TokenDetail
-    token2: TokenDetail
-}
-
-
-

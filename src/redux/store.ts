@@ -1,11 +1,13 @@
 'use client';
 import { configureStore } from "@reduxjs/toolkit";
-import profile from "./slice/ProfileSlice";
+import wallet from "./slice/WalletSlice";
+import invoice from "./slice/InvoiceSlice";
 
 
 export const store = configureStore({
     reducer: {
-        profile,
+        wallet,
+        invoice,
     },
 });
 

@@ -14,6 +14,8 @@ type UserContextType = {
   setInvoiceSats: React.Dispatch<React.SetStateAction<number>>;
   createdInvoice: string;
   setCreatedInvoice: React.Dispatch<React.SetStateAction<string>>;
+  steps:number;
+  setSteps: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const UserContext = React.createContext<UserContextType | undefined>(undefined);
@@ -27,6 +29,7 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [address, setAddress] = useState("");
   const [invoiceSats, setInvoiceSats] = useState(0);
   const [createdInvoice, setCreatedInvoice] = useState("");
+  const [steps, setSteps] = useState(3);
 
   return (
     <UserContext.Provider
@@ -43,6 +46,8 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
         setInvoiceSats,
         createdInvoice,
         setCreatedInvoice,
+        steps,
+        setSteps
       }}
     >
       {children}

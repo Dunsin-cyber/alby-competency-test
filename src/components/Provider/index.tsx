@@ -5,7 +5,6 @@ import store from "@/redux/store";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// import { WebLNProvider } from "@/webln/provider";
 const WebLNProvider = dynamic(
   () => import("@/webln/provider").then((mod) => mod.WebLNProvider),
   {
