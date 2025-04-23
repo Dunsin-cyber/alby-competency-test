@@ -159,7 +159,10 @@ function Payment() {
     <div className="flex flex-col items-center py-8 gap-5 w-full max-w-md md:max-w-3xl mx-auto">
       <div className="flex items-center justify-between w-full my-4">
         <ArrowLeftOutlined onClick={() => router("/back")} />
-        <h1 className="text-2xl font-bold text-center">Make Payment</h1>
+        <h1 className="text-2xl font-bold text-center">
+          Make Payment{" "}
+          <span className="text-xs align-middle ml-2">{payToInvoice ? "(BOLT11)" : "(LN Address)"}</span>
+        </h1>{" "}
         <Scanner />
         <ScanOutlined
           twoToneColor="#52c41a"
@@ -244,15 +247,14 @@ function Payment() {
               Go Back
             </Button>
             {steps === 1 && (
-
               <Button
-              onClick={handlePay}
-              loading={paying}
-              disabled={paying}
-              className="mt-8 w-full"
+                onClick={handlePay}
+                loading={paying}
+                disabled={paying}
+                className="mt-8 w-full"
               >
-              Pay
-            </Button>
+                Pay
+              </Button>
             )}
           </Space>
         </div>

@@ -74,6 +74,8 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // const keySendPayment = async () => {}
+
   const sendPayment = async (invoice: string) => {
     if (!webln) {
       setError("WebLN not enabled");
