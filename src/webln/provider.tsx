@@ -14,7 +14,7 @@ type WebLNContextType = {
   disconnect: () => void;
   getInfo: () => any;
   sendPayment: (invoice: string) => Promise<void>;
-  makeInvoice: (amount: number) => Promise<string>;
+  makeInvoice: (amount: number, description:string) => Promise<string>;
   getBalance: any;
   balance: number | null;
 };
@@ -93,13 +93,17 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const makeInvoice = async (amount: number) => {
+  const makeInvoice = async (amount: number, description:string) => {
     if (!webln) {
       setError("WebLN not enabled");
       throw new Error("WebLN not enabled");
     }
     try {
-      const invoice = await webln.makeInvoice(amount);
+      const args = {
+        amount: amount,
+        defaultMemo: description,
+      }
+      const invoice = await webln.makeInvoice(args);
       return invoice.paymentRequest;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Invoice creation failed");

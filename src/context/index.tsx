@@ -10,6 +10,10 @@ type UserContextType = {
   setOpenScanner: React.Dispatch<React.SetStateAction<boolean>>;
   address: string;
   setAddress: React.Dispatch<React.SetStateAction<string>>;
+  invoiceSats: number;
+  setInvoiceSats: React.Dispatch<React.SetStateAction<number>>;
+  createdInvoice: string;
+  setCreatedInvoice: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const UserContext = React.createContext<UserContextType | undefined>(undefined);
@@ -21,6 +25,8 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [openScanner, setOpenScanner] = useState(false);
   const [address, setAddress] = useState("");
+  const [invoiceSats, setInvoiceSats] = useState(0);
+  const [createdInvoice, setCreatedInvoice] = useState("");
 
   return (
     <UserContext.Provider
@@ -33,6 +39,10 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
         setOpenScanner,
         address,
         setAddress,
+        invoiceSats,  
+        setInvoiceSats,
+        createdInvoice,
+        setCreatedInvoice,
       }}
     >
       {children}

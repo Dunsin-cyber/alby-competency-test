@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useClient } from "@/context";
 
 const SATS_IN_BTC = 100_000_000;
 
@@ -7,6 +8,7 @@ const Converter = () => {
   const [btcPrice, setBtcPrice] = useState<number>(0);
   const [inputValue, setInputValue] = useState<string>("");
   const [mode, setMode] = useState<"sats" | "fiat">("sats");
+ const { setInvoiceSats } = useClient();
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -21,11 +23,19 @@ const Converter = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+
+        if (mode === "sats") {
+          setInvoiceSats(+e.target.value);
+        } else {
+          setInvoiceSats((+e.target.value / btcPrice) * SATS_IN_BTC);
+        }
   };
 
   const getConvertedValue = () => {
     const value = parseFloat(inputValue);
     if (isNaN(value) || !btcPrice) return "";
+
+
 
     return mode === "sats"
       ? `$${((value / SATS_IN_BTC) * btcPrice).toFixed(2)}`

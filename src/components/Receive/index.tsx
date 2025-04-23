@@ -1,10 +1,13 @@
 "use client";
+import { useClient } from "@/context";
 import { useRouter } from "@/hooks/useRouterWithProgress";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, Input, QRCode, Typography, theme } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import Converter from "./Converter";
+import { useWebLN } from "@/webln/provider";
+
 
 const { Paragraph, Text } = Typography;
 
@@ -12,40 +15,38 @@ function Recieve() {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const [generated, setGenerated] = useState<boolean>(false);
-
-  const [btcPrice, setBtcPrice] = useState<number>(0);
-  const [sats, setSats] = useState<number | string>("");
-  const [fiat, setFiat] = useState<number | string>("");
   const [description, setDescription] = useState<string>("");
+  const { invoiceSats, setCreatedInvoice } = useClient();
+  const { enable,makeInvoice, balance } = useWebLN();
 
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const res = await fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+  const handleCreateInvoice = async () => {
+    try {
+      if (!invoiceSats) {
+        toast.error("Please enter a valid amount");
+        return;
+      }
+      if (!description) {
+        toast.error("Please enter a description");
+        return;
+      }
+      console.log(
+        "Creating invoice with amount:",
+        invoiceSats,
+        "description:",
+        description
       );
-      const data = await res.json();
-      setBtcPrice(data.bitcoin.usd);
-    };
-    fetchPrice();
-  }, []);
-
-  const handleSatsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSats(value);
-    if (btcPrice && !isNaN(+value)) {
-      setFiat(((+value / 100000000) * btcPrice).toFixed(2));
-    } else {
-      setFiat("");
-    }
-  };
-
-  const handleFiatChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setFiat(value);
-    if (btcPrice && !isNaN(+value)) {
-      setSats(((+value / btcPrice) * 100000000).toFixed(0));
-    } else {
-      setSats("");
+      setLoading(true);
+      // Enable webLn
+     await enable();
+     const invoice =  await makeInvoice(invoiceSats, description);
+      console.log("Invoice created:", invoice);
+      setCreatedInvoice(invoice);
+        setGenerated(true);
+    } catch (error) {
+      console.error("Error creating invoice:", error);
+      toast.error(error.message || "Failed to create invoice");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,16 +60,7 @@ function Recieve() {
       {!generated ? (
         <div className="flex flex-col items-center w-full gap-5">
           <div className="flex flex-col font-bold space-y-1 w-full">
-            {/* <p>Amount</p>
-            <Input
-              placeholder="Amount in Satoshi..."
-              value={sats}
-              onChange={(e) => {
-                setSats(e.target.value);
-              }}
-              className="w-full"
-            /> */}
-            <Converter/>
+            <Converter />
           </div>
           <div className="flex flex-col font-bold space-y-1 w-full">
             <p>Description</p>
@@ -82,7 +74,7 @@ function Recieve() {
             />
           </div>
           <Button
-            onClick={() => setGenerated(true)}
+            onClick={handleCreateInvoice}
             disabled={loading}
             loading={loading}
             type="primary"
@@ -104,10 +96,12 @@ const { useToken } = theme;
 
 function SuccessScreen() {
   const { token } = useToken();
+    const { createdInvoice } = useClient();
+
+
   const handleCopy = async () => {
     try {
-      const link = `${window.location.origin}/pay-invoice/`;
-      await navigator.clipboard.writeText(link);
+      await navigator.clipboard.writeText(createdInvoice);
       toast.success("Link copied to clipboard!");
     } catch (err) {
       toast.error("Failed to copy:", err);
@@ -118,7 +112,7 @@ function SuccessScreen() {
     <div className="flex flex-col justify-center items-center gap-4">
       <QRCode
         size={250}
-        value="https://ant.design/"
+        value={createdInvoice}
         color={token.colorSuccessText}
       />
       <Button type="primary" size="large" key="console" onClick={handleCopy}>
