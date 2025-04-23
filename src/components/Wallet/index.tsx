@@ -48,12 +48,19 @@ function Wallet() {
         </button>
       </div>
 
+      <button
+        onClick={() => router("/key-send")}
+        className="px-8 py-2 border border-black bg-transparent text-black  dark:border-white relative group transition duration-200"
+      >
+        <div className="absolute -bottom-2 -right-2 bg-yellow-300 h-full w-full -z-10 group-hover:bottom-0 group-hover:right-0 transition-all duration-200" />
+        <span className="relative">key send</span>
+      </button>
+
       {/* transactions */}
-      <div className="flex flex-col justify-center items-center space-y-3">
+      <div className="flex flex-col justify-center items-center mt-12 space-y-3">
         <h1 className="text-2xl font-bold">Transactions</h1>
         <p className="text-sm text-gray-500">
-          No transactions yet. 
-          Send or receive some sats to see them here.
+          No transactions yet. Send or receive some sats to see them here.
         </p>
         {/* <Transactions /> */}
       </div>
