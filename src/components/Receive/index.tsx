@@ -1,12 +1,12 @@
 "use client";
 import { useClient } from "@/context";
 import { useRouter } from "@/hooks/useRouterWithProgress";
+import { useWebLN } from "@/webln/provider";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, Input, QRCode, Typography, theme } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Converter from "./Converter";
-import { useWebLN } from "@/webln/provider";
 
 
 const { Paragraph, Text } = Typography;
@@ -29,17 +29,10 @@ function Recieve() {
         toast.error("Please enter a description");
         return;
       }
-      console.log(
-        "Creating invoice with amount:",
-        invoiceSats,
-        "description:",
-        description
-      );
       setLoading(true);
-      // Enable webLn
+    // Enable webLn
      await enable();
      const invoice =  await makeInvoice(invoiceSats, description);
-      console.log("Invoice created:", invoice);
       setCreatedInvoice(invoice);
         setGenerated(true);
     } catch (error) {
