@@ -1,7 +1,7 @@
 "use client";
 import { UserContextProvider } from "@/context";
-import dynamic from "next/dynamic";
 import store from "@/redux/store";
+import dynamic from "next/dynamic";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -27,8 +27,8 @@ import AntdProvider from "./AntdProvider";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WebLNProvider>
-      <ReduxProvider store={store}>
+    <ReduxProvider store={store}>
+      <WebLNProvider>
         {/* <QueryClientProvider client={queryClient}> */}
         <UserContextProvider>
           <Toaster
@@ -59,8 +59,8 @@ function Providers({ children }: { children: React.ReactNode }) {
           </AntdProvider>
         </UserContextProvider>
         {/*   </QueryClientProvider> */}
-      </ReduxProvider>
-    </WebLNProvider>
+      </WebLNProvider>
+    </ReduxProvider>
   );
 }
 

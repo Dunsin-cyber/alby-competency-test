@@ -1,6 +1,9 @@
 "use client";
 import { requestProvider } from "@getalby/bitcoin-connect";
 import React, { createContext, useContext, useState } from "react";
+import { useAppDispatch } from "@/redux/hook";
+import { addWallet } from "@/redux/slice/WalletSlice"; 
+
 
 type WebLNContextType = {
   webln: any;
@@ -22,6 +25,7 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
+   const dispatch = useAppDispatch();
 
   const enable = async () => {
     setIsLoading(true);
@@ -38,6 +42,8 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
       setWebln(provider);
 
       await getBalance();
+      const info = await getInfo();
+       dispatch(addWallet(info));
     } catch (err) {
       console.log(err);
       setError(err instanceof Error ? err.message : "Failed to enable WebLN");
