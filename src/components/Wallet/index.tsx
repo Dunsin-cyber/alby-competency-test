@@ -1,14 +1,38 @@
 "use client";
-import React from "react";
 import { useRouter } from "@/hooks/useRouterWithProgress";
 import { useWebLN } from "@/webln/provider";
+import { requestProvider } from "@getalby/bitcoin-connect";
 import { Button } from "antd";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import Transactions from "../Transactions";
 
 function Wallet() {
   const router = useRouter();
   const { enable, isLoading, balance } = useWebLN();
+  const [loading, setLoading] = useState(false);
+
+  const handleKeysend = async () => {
+    try {
+      setLoading(true);
+
+      const params = {
+        destination: "skillfulcloud228426@getalby.com",
+        amount: 300,
+      };
+      const provider = await requestProvider();
+      if (!provider) {
+        throw new Error("No WebLN provider found");
+      }
+      const keysendPay = await provider.keysend(params);
+      console.log(keysendPay);
+      toast.success("successfuly sent");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center py-8">
@@ -49,11 +73,12 @@ function Wallet() {
       </div>
 
       <button
-        onClick={() => router("/key-send")}
+        onClick={handleKeysend}
+        disabled={loading}
         className="px-8 py-2 border border-black bg-transparent text-black  dark:border-white relative group transition duration-200"
       >
         <div className="absolute -bottom-2 -right-2 bg-yellow-300 h-full w-full -z-10 group-hover:bottom-0 group-hover:right-0 transition-all duration-200" />
-        <span className="relative">key send</span>
+        <span className="relative">key send 300 sats</span>
       </button>
 
       {/* transactions */}
