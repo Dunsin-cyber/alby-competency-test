@@ -17,7 +17,11 @@ export interface InvoiceDetails {
 }
 
 export interface WalletDetails {
-    id: string;
-    name: string;
-    balance: number;
+  node: {
+    alias?: string;
+    pubkey?: string;
+  };
+  methods: string[];
+  supports: string[];
+  version: string;
 }

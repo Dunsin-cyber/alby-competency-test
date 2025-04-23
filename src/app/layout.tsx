@@ -2,15 +2,7 @@ import Providers from "@/components/Provider";
 import type { Metadata } from "next";
 import "./font.css";
 import "./globals.css";
-// import {
-//   init
-// } from "@getalby/bitcoin-connect-react";
 
-
-// // Initialize Bitcoin Connect
-// init({
-//   appName: "Alby Competency Test - act", 
-// })
 
 export const metadata: Metadata = {
   title: "act",

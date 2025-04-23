@@ -1,129 +1,91 @@
 "use client";
-import React from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import ColourfulText from "@/components/ui/colourful-text";
+import { useWebLN } from "@/webln/provider";
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Divider, Dropdown, Space, theme } from "antd";
-import type { MenuProps } from "antd";
-import {
-  IconBrandGithub,
-  IconHome,
-  IconNewSection,
-  IconTerminal2,
-} from "@tabler/icons-react";
-
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { RootState } from "@/redux/store"; 
+import { addWallet } from "@/redux/slice/WalletSlice"; 
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 
 const { useToken } = theme;
 
-export const links = [
-  {
-    title: "Home",
-    icon: (
-      <IconHome className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
-    href: "#",
-  },
-
-  {
-    title: "Products",
-    icon: (
-      <IconTerminal2 className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
-    href: "#",
-  },
-  {
-    title: "Components",
-    icon: (
-      <IconNewSection className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
-    href: "#",
-  },
-  {
-    title: "GitHub",
-    icon: (
-      <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
-    ),
-    href: "https://github.com/successaje/GridX",
-  },
-];
-
-
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.antgroup.com"
-      >
-        1st menu item
-      </a>
-    ),
-  },
-  {
-    key: "2",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.aliyun.com"
-      >
-        2nd menu item (disabled)
-      </a>
-    ),
-    disabled: true,
-  },
-  {
-    key: "3",
-    label: (
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.luohanacademy.com"
-      >
-        3rd menu item (disabled)
-      </a>
-    ),
-    disabled: true,
-  },
-];
-
-
-
 export default function FloatingDockDemo() {
   const { token } = useToken();
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const wallet = useAppSelector((state: RootState) => state.wallet);
 
-    const contentStyle: React.CSSProperties = {
-    backgroundColor: token.colorBgElevated,
-    borderRadius: token.borderRadiusLG,
-    boxShadow: token.boxShadowSecondary,
+  const { getInfo, enable } = useWebLN();
+
+  const handleGetInfo = async (e: any) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await enable();
+      const info = await getInfo();
+      console.log("Wallet Info: ", info);
+      dispatch(addWallet(info));
+    } catch (error) {
+      console.error("Error fetching wallet info: ", error);
+      toast.error("Error fetching wallet info");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const menuStyle: React.CSSProperties = {
-    boxShadow: 'none',
-  };
+  const dropdownItems = [
+    {
+      key: "version",
+      label: `Version: ${wallet?.version || "N/A"}`,
+    },
+    {
+      key: "pubkey",
+      label: `Node Pubkey: ${wallet?.node?.pubkey || "N/A"}`,
+    },
+    {
+      key: "methods",
+      label: `Methods: ${wallet?.methods?.join(", ") || "N/A"}`,
+    },
+    {
+      key: "supports",
+      label: `Supports: ${wallet?.supports?.join(", ") || "N/A"}`,
+    },
+  ];
 
   return (
-    <div className=" flex justify-between items-center mt-5">
+    <div className="flex justify-between items-center mt-5">
       <div className="text-3xl font-bold z-2 font-sans">
         <ColourfulText text="act" />
       </div>
       <div className="flex space-x-4 justify-between">
         <ThemeToggle />
         <Dropdown
-          menu={{ items }}
+          menu={{ items: dropdownItems }}
           dropdownRender={(menu) => (
-            <div style={contentStyle}>
+            <div
+              style={{
+                backgroundColor: token.colorBgElevated,
+                borderRadius: token.borderRadiusLG,
+                boxShadow: token.boxShadowSecondary,
+              }}
+            >
               {React.cloneElement(
-                menu as React.ReactElement<{
-                  style: React.CSSProperties;
-                }>,
-                { style: menuStyle }
+                menu as React.ReactElement<{ style: React.CSSProperties }>,
+                { style: { boxShadow: "none" } }
               )}
               <Divider style={{ margin: 0 }} />
               <Space style={{ padding: 8 }}>
-                <Button type="primary">Refresh</Button>
+                <Button
+                  loading={loading}
+                  disabled={loading}
+                  onClick={(e) => handleGetInfo(e)}
+                  type="primary"
+                >
+                  Refresh
+                </Button>
               </Space>
             </div>
           )}
