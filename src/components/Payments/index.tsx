@@ -3,6 +3,7 @@ import Scanner from "@/components/QrCode/Scanner";
 import { useClient } from "@/context/index";
 import { useRouter } from "@/hooks/useRouterWithProgress";
 import { decodeInvoice } from "@/lib/lightning/decodeInvoice";
+import { getTimeLeftString } from "@/lib/timeLeft";
 import { isBolt11Invoice, isLightningAddress } from "@/lib/webln";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { addInvoice } from "@/redux/slice/InvoiceSlice";
@@ -16,7 +17,7 @@ import {
 import { Button, Input, Result, Steps, Typography } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import {getTimeLeftString} from "@/lib/timeLeft";
+import Converter from "@/components/Receive/Converter";
 
 const { Paragraph, Text } = Typography;
 
@@ -25,19 +26,18 @@ const description = "payment with WebLN provider";
 function Payment() {
   const [payToInvoice, setPayToInvoice] = useState(true);
   const {
-    currentStep,
-    setCurrentStep,
+    progressBarStep,
+    setProgressBarStep,
     setOpenScanner,
     address,
     setAddress,
     steps,
     setSteps,
+    invoiceSats,
   } = useClient();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
-
-  const [decodedResults, setDecodedResults] = useState([]);
 
   const handlePayment = async () => {
     try {
@@ -50,6 +50,9 @@ function Payment() {
       // Check if the address is a valid Lightning Address or Bolt11 Invoice
       if (isLightningAddress(address)) {
         setPayToInvoice(false);
+        if (progressBarStep === 0) {
+          setProgressBarStep(1);
+        }
       } else if (isBolt11Invoice(address)) {
         const decodedInvoice = await decodeInvoice(address);
         const params: InvoiceDetails = {
@@ -62,18 +65,53 @@ function Payment() {
         dispatch(addInvoice(params));
         setPayToInvoice(true);
         setSteps(1);
-        setCurrentStep(1);
+        setProgressBarStep(1);
       } else {
         toast.error("Invalid Lightning Address or Bolt11 Invoice!");
         return;
       }
 
-      // TODO use enable() first from webln provider
-      setCurrentStep((prev) => prev + 1);
+      // * check if address and amount are valid
+      if (!invoiceSats && !payToInvoice) {
+        toast.error("Please enter a valid amount!");
+        return;
+      }
+      // * create invoice
+      const res = await fetch(
+        `/api/create-invoice?lnAddress=${address}&amount=${invoiceSats}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      // const payment = await webln.sendPayment(address);
-      // console.log(payment);
-      // toast.success("Payment sent!");
+      if (!res.ok) {
+        const err = await res.json();
+        toast.error(err?.error || "Something went wrong");
+        return;
+      }
+
+      const data = await res.json();
+      toast.success("Invoice created successfully");
+      if(data) {
+      const decodedInvoice = await decodeInvoice(data.invoice);
+       const params: InvoiceDetails = {
+         millisatoshis: decodedInvoice.millisatoshis,
+         satoshis: decodedInvoice.satoshis,
+         description: decodedInvoice.tags[1].data as string,
+         hash: decodedInvoice.tags[0].data as string,
+         timeLeft: decodedInvoice.timeExpireDate,
+       };
+       dispatch(addInvoice(params));
+       setPayToInvoice(true);
+       // move to payment preview screen
+       setSteps(1);
+       // move to payment preview on the progress bar for (LN ADDRESS)
+       setProgressBarStep(2);
+      }
+    
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -100,7 +138,7 @@ function Payment() {
         <div className="flex flex-col space-y-1 w-full">
           <Steps
             direction="horizontal"
-            current={currentStep}
+            current={progressBarStep}
             items={
               payToInvoice
                 ? [
@@ -122,10 +160,7 @@ function Payment() {
                       title: "Amount in Sats",
                       description,
                     },
-                    {
-                      title: "Send Payment",
-                      description,
-                    },
+           
                     {
                       title: "Preview",
                       description,
@@ -143,9 +178,8 @@ function Payment() {
             className="w-full"
           />
           {!payToInvoice && (
-            <Input placeholder="how many sats" className="w-full" />
+            <Converter/>
           )}
-          {/* {payToInvoice && <PaymentPreview />} */}
           <Button
             onClick={() => handlePayment()}
             disabled={loading}
@@ -196,7 +230,7 @@ function PaymentPreview() {
     <Result
       icon={<SmileOutlined />}
       title={`${invoice?.satoshis.toLocaleString()} sats`}
-      subTitle={`you are about to pay the above amount for ${invoice?.description}`}
+      subTitle={`you are about to pay the above amount for ${invoice?.description.slice(0,30)}...`}
     >
       <div className="desc">
         <Paragraph>
@@ -210,12 +244,12 @@ function PaymentPreview() {
           </Text>
         </Paragraph>
         <Paragraph>
-          <CheckCircleOutlined className="site-result-demo-success-icon" />  
-            {" " + getTimeLeftString(invoice?.timeLeft)} to expire
+          <CheckCircleOutlined className="site-result-demo-success-icon" />
+          {" " + getTimeLeftString(invoice?.timeLeft)} to expire
         </Paragraph>
         <Paragraph>
-          <CheckCircleOutlined className="site-result-demo-success-icon" /> 
-            {" "}   a payment hash of : {invoice?.hash.slice(0, 20)}...
+          <CheckCircleOutlined className="site-result-demo-success-icon" /> a
+          payment hash of : {invoice?.hash.slice(0, 20)}...
         </Paragraph>
       </div>
     </Result>

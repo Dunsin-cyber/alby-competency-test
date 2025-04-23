@@ -4,8 +4,8 @@ import React, { useContext, useState } from "react";
 type UserContextType = {
   isDarkMode: boolean;
   setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
-  currentStep: number;
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  progressBarStep: number;
+  setProgressBarStep: React.Dispatch<React.SetStateAction<number>>;
   openScanner: boolean;
   setOpenScanner: React.Dispatch<React.SetStateAction<boolean>>;
   address: string;
@@ -14,7 +14,7 @@ type UserContextType = {
   setInvoiceSats: React.Dispatch<React.SetStateAction<number>>;
   createdInvoice: string;
   setCreatedInvoice: React.Dispatch<React.SetStateAction<string>>;
-  steps:number;
+  steps: number;
   setSteps: React.Dispatch<React.SetStateAction<number>>;
 };
 
@@ -24,7 +24,7 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [progressBarStep, setProgressBarStep] = useState(0);
   const [openScanner, setOpenScanner] = useState(false);
   const [address, setAddress] = useState("");
   const [invoiceSats, setInvoiceSats] = useState(0);
@@ -36,18 +36,18 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         isDarkMode,
         setIsDarkMode,
-        currentStep,
-        setCurrentStep,
+        progressBarStep,
+        setProgressBarStep,
         openScanner,
         setOpenScanner,
         address,
         setAddress,
-        invoiceSats,  
+        invoiceSats,
         setInvoiceSats,
         createdInvoice,
         setCreatedInvoice,
         steps,
-        setSteps
+        setSteps,
       }}
     >
       {children}
