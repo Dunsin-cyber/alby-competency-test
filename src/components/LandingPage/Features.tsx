@@ -11,7 +11,7 @@ function Features() {
       src: "/automation.jpg",
     },
     {
-      quote: "Pay 1 sat every time you scroll. Programmable money made simple.",
+      quote: "Pay 100 sat every time you scroll. Programmable money made simple.",
       name: "Auto-Payment on Scroll",
       designation: "Triggers micro-payments as users interact with content.",
       src: "/pricing.jpg",

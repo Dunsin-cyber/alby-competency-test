@@ -17,7 +17,7 @@ export default function AutoScrollPay() {
 
         await provider.keysend({
           destination: "hello@getalby.com", // <- your test pubkey or receiver node pubkey
-          amount: 2100,
+          amount: 100,
         });
 
         toast.success("Paid 1 sat!");
@@ -30,7 +30,7 @@ export default function AutoScrollPay() {
         // Wait a bit before allowing another payment
         setTimeout(() => {
           isSending.current = false;
-        }, 3000); // Throttle: 3 seconds between scroll triggers
+        }, 8000); // Throttle: 3 seconds between scroll triggers
       }
     };
 
