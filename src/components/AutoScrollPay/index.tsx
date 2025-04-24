@@ -16,15 +16,16 @@ export default function AutoScrollPay() {
         await provider.enable();
 
         await provider.keysend({
-          destination: "skillfulcloud228426@getalby.com", // <- your test pubkey or receiver node pubkey
-          amount: 1,
+          destination: "hello@getalby.com", // <- your test pubkey or receiver node pubkey
+          amount: 2100,
         });
 
         toast.success("Paid 1 sat!");
       } catch (err) {
         console.error("Auto-scroll payment failed", err);
-        const error = err.message || "Auto-payment Failed"
-        toast.error(error);
+        // const error = err.message || "Auto-payment Failed"
+
+        toast.error("Auto-payment Failed");
       } finally {
         // Wait a bit before allowing another payment
         setTimeout(() => {
