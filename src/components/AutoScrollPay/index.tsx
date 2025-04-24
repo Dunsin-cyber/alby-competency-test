@@ -23,7 +23,8 @@ export default function AutoScrollPay() {
         toast.success("Paid 1 sat!");
       } catch (err) {
         console.error("Auto-scroll payment failed", err);
-        toast.error(err.message);
+        const error = err.message || "Auto-payment Failed"
+        toast.error(error);
       } finally {
         // Wait a bit before allowing another payment
         setTimeout(() => {
