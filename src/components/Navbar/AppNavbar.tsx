@@ -18,7 +18,7 @@ export default function FloatingDockDemo() {
   const dispatch = useAppDispatch();
   const wallet = useAppSelector((state: RootState) => state.wallet);
 
-  const { getInfo, enable } = useWebLN();
+  const { getInfo, enable, disconnect } = useWebLN();
 
   const handleGetInfo = async (e: any) => {
     e.preventDefault();
@@ -85,6 +85,12 @@ export default function FloatingDockDemo() {
                   type="primary"
                 >
                   Refresh
+                </Button>
+                 <Button
+                  onClick={(e) => disconnect()}
+                 
+                >
+                  Disconnect
                 </Button>
               </Space>
             </div>

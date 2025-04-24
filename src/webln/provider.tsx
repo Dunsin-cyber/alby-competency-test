@@ -56,6 +56,7 @@ export function WebLNProvider({ children }: { children: React.ReactNode }) {
   const disconnect = () => {
     setWebln(null);
     setError(null);
+    window.location.reload()
   };
 
   const getInfo = async () => {
