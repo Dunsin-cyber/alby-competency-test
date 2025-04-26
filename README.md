@@ -79,7 +79,7 @@ async function handlePayment(invoice: string) {
 
 ## 🎥 Demo Video
 
-[Watch the application walkthrough](https://your-demo-link.here) 
+[Watch the application walkthrough](https://www.youtube.com/watch?v=z12k1CkEZ00) 
 
 ## 🌈 Contributing
 
