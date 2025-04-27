@@ -3,7 +3,6 @@
 
 A React/Next.js application demonstrating Bitcoin Lightning Network integration using WebLN and Alby. Implements core LN functionalities like payments, keysend, auto-pay on scroll, and wallet info display.
 
-![Demo Screenshot](/screenshot.png) 
 ## 🌟 Features
 
 ### Core WebLN Functionalities
