@@ -1,6 +1,7 @@
 
 # ⚡ Lightning Web App with WebLN
 https://alby-competency-test-y4lk.vercel.app/wallet
+
 A React/Next.js application demonstrating Bitcoin Lightning Network integration using WebLN and Alby. Implements core LN functionalities like payments, keysend, auto-pay on scroll, and wallet info display.
 
 ## 🌟 Features
